@@ -77,6 +77,7 @@ function displaydata(src , p) {
 }
 async function test(div){
   $('#firstFrame').addClass('d-none')
+  closeNavBar()
   const respons = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${div.lastElementChild.firstElementChild.innerHTML}`);
   const result = await respons.json();
   displayDetails(result)
