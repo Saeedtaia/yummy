@@ -1,6 +1,7 @@
 /// <reference types="../@types/jquery"/>
 //nav bar move
 const item = document.querySelector('.items');
+const reloadchild = document.querySelector('#childReload')
 const child = item.children[0];
 $('#navPop').on('click',function(e){
     $(child).next().next().next().next().stop(true ,true)
@@ -74,16 +75,22 @@ function displaydata(src , p) {
                 </div>
             </div>
         `);
+        
+    reloadchild.classList.add('d-none');
+    reloadchild.classList.remove('d-flex');
 }
 async function test(div){
-  $('#firstFrame').addClass('d-none')
-  closeNavBar()
+    firstReload.classList.add('d-flex');
+    firstReload.classList.remove('d-none');
+    closeNavBar()
   const respons = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${div.lastElementChild.firstElementChild.innerHTML}`);
   const result = await respons.json();
   displayDetails(result)
-  $('#detailsShow').removeClass('d-none');
 }
 function displayDetails(result) {
+    firstReload.classList.add('d-flex');
+    firstReload.classList.remove('d-none');
+    const deatelsShow = document.querySelector('#detailsShow .row').innerHTML = ""
     $('#detailsShow .row').append(`
     <div class="col-md-4">
               <img src="${result.meals[0].strMealThumb}" class="w-100 rounded-3" alt="">
@@ -113,6 +120,12 @@ function displayDetails(result) {
                 `);
             }
         }
+  $('#firstFrame').addClass('d-none')
+  $('#detailsShow').removeClass('d-none');
+  $(window).scrollTop(0)
+  firstReload.classList.add('d-none');
+    firstReload.classList.remove('d-flex');
+
 };
 $('#backToHome').on('click', function(){
     $('#detailsShow').addClass('d-none');
@@ -212,6 +225,8 @@ function categoryData(strCategory,strCategoryDescription,strCategoryThumb) {
     `)
 }
 async function mainIngredients(main){
+    firstReload.classList.add('d-flex');
+    firstReload.classList.remove('d-none');
     const respons = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${main.lastElementChild.firstElementChild.firstElementChild.innerHTML}`)
     const data = await respons.json()
     // console.log(data);
@@ -221,6 +236,8 @@ async function mainIngredients(main){
     }
     $('#categoryPart').addClass('d-none')
     $('#firstFrame').removeClass('d-none');
+    firstReload.classList.add('d-none');
+    firstReload.classList.remove('d-flex');
 }
 
 //=> Area 
@@ -249,6 +266,8 @@ async function displayErea(){
 }
 }
 async function getAreaMeals(country){
+    firstReload.classList.add('d-flex');
+    firstReload.classList.remove('d-none');
     const response = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?a=${country.lastElementChild.innerHTML}`)
     const data =await response.json();
     console.log(data);
@@ -261,6 +280,8 @@ function areaApendedData(data){
     }
     $('#areaPart').addClass('d-none')
     $('#firstFrame').removeClass('d-none');
+    firstReload.classList.add('d-none');
+    firstReload.classList.remove('d-flex');
 }
 
 //=>Ingredients
@@ -295,6 +316,8 @@ function apendIngredients(data){
 }
 }
 async function displayIngredientDetails(data) {
+    firstReload.classList.add('d-flex');
+    firstReload.classList.remove('d-none');
     const response = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${data.firstElementChild.nextElementSibling.innerHTML}`)
     const result =await response.json();
     // console.log(result);
@@ -305,6 +328,8 @@ async function displayIngredientDetails(data) {
         }
         $('#IngredientsPart').addClass('d-none');
         $('#firstFrame').removeClass('d-none')
+        firstReload.classList.add('d-none');
+    firstReload.classList.remove('d-flex');
 }
 
 //=> form
@@ -334,6 +359,8 @@ function testbtn(){
     if( number.value !=""&& userName.value != "" && userPassword.value != ""&& userMail.value != "" && userAge.value != "" &&repassword.value !=""){
         btn.removeAttribute('disabled');
         btn.addEventListener('click', function(){
+            firstReload.classList.add('d-flex');
+    firstReload.classList.remove('d-none');
             closeNavBar()
         $('#firstFrame').removeClass('d-none');
         $('#search').addClass('d-none')
@@ -341,7 +368,11 @@ function testbtn(){
         $('#areaPart').addClass('d-none')
         $('#IngredientsPart').addClass('d-none');
         $('#contactUsPart').addClass('d-none');
-        clear(number);clear(userAge);clear(userName);clear(userMail);clear(userPhone);clear(repassword);clear(userPassword)
+        clear(number);clear(userAge);clear(userName);clear(userMail);
+        repassword.value="";
+        userPassword.value="";
+        firstReload.classList.add('d-none');
+    firstReload.classList.remove('d-flex');
         })
     }else{
         btn.setAttribute('disabled', true);
@@ -369,7 +400,21 @@ function testAll(inputId , rgexText , messageClassName){
                 $(messageClassName).slideDown(500);
                 $(inputId).removeClass('mb-5')
                 const btn = document.querySelector('#submitBtn').setAttribute('disabled', true);
-                repassword()
+                const password = document.querySelector('#userPassword')
+    const repassword = document.querySelector('#repassword')
+    $('#repassword').on('keyup', function(event){
+        if(password.value=== repassword.value){
+            $('.repasswordMessage').slideUp(500);
+            $('#repassword').addClass('mb-5')
+            testbtn()
+        }
+        else{
+            $('.repasswordMessage').removeClass('d-none');
+            $('.repasswordMessage').slideDown(500);
+            $('#repassword').removeClass('mb-5')
+            const btn = document.querySelector('#submitBtn').setAttribute('disabled', true);
+        }
+    })
             }
         }
         
