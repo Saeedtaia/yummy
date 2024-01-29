@@ -140,6 +140,7 @@ $('#backToHome').on('click', function(){
 //=.search
 $('#searchPart').on('click',function (params) {
     $('#IngredientsPart').addClass('d-none');
+    $('#detailsShow').addClass('d-none');
     closeNavBar()
     $('#firstFrame').addClass('d-none')
     $('#categoryPart').addClass('d-none')
@@ -221,6 +222,7 @@ function displaydataSearch(src , p) {
 }
 //=> categories
 $('#category').on('click',function (e) {
+    $('#detailsShow').addClass('d-none');
     $('#IngredientsPart').addClass('d-none');
     closeNavBar()
     $('#firstFrame').addClass('d-none');
@@ -276,6 +278,7 @@ async function mainIngredients(main){
 //=> Area 
 $('#area').on('click', function(){
     closeNavBar()
+    $('#detailsShow').addClass('d-none');
     $('#firstFrame').addClass('d-none');
     $('#search').addClass('d-none')
     $('#categoryPart').addClass('d-none');
@@ -303,6 +306,7 @@ async function getAreaMeals(country){
     firstReload.classList.remove('d-none');
     const response = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?a=${country.lastElementChild.innerHTML}`)
     const data =await response.json();
+    console.log(data);
     areaApendedData(data)
 }
 function areaApendedData(data){
@@ -318,6 +322,7 @@ function areaApendedData(data){
 
 //=>Ingredients
 $('#Ingredients').on('click', function(){
+    $('#detailsShow').addClass('d-none');
     closeNavBar()
     $('#firstFrame').addClass('d-none');
     $('#search').addClass('d-none')
@@ -330,6 +335,7 @@ displayIngredientsPart()
 async function displayIngredientsPart(){
     const response = await fetch(`https://www.themealdb.com/api/json/v1/1/list.php?i=list`)
     const data =await response.json();
+    // console.log(data);
     apendIngredients(data)
 }
 function apendIngredients(data){
@@ -355,6 +361,7 @@ async function displayIngredientDetails(data) {
     const row =document.querySelector('.firstData').innerHTML=""
     for (let i = 0; i < result.meals.length; i++) {
         displaydata(result.meals[i].strMealThumb, result.meals[i].strMeal)
+        // console.log(data.meals[i].strMealThumb, data.meals[i].strMeal);
         }
         $('#IngredientsPart').addClass('d-none');
         $('#firstFrame').removeClass('d-none')
@@ -364,6 +371,7 @@ async function displayIngredientDetails(data) {
 
 //=> form
 $('#contactUs').on('click',function(e) {
+    $('#detailsShow').addClass('d-none');
     closeNavBar()
     $('#firstFrame').addClass('d-none');
     $('#search').addClass('d-none')
