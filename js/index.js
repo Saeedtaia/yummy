@@ -1,4 +1,5 @@
 /// <reference types="../@types/jquery"/>
+//=>  we need to make try and catch for all fech
 //nav bar move
 const item = document.querySelector('.items');
 const reloadchild = document.querySelector('#childReload')
@@ -121,6 +122,11 @@ function displayDetails(result) {
             }
         }
   $('#firstFrame').addClass('d-none')
+  $('#search').addClass('d-none')
+  $('#categoryPart').addClass('d-none')
+  $('#areaPart').addClass('d-none')
+  $('#IngredientsPart').addClass('d-none')
+  $('#contactUsPart').addClass('d-none')
   $('#detailsShow').removeClass('d-none');
   $(window).scrollTop(0)
   firstReload.classList.add('d-none');
@@ -142,36 +148,61 @@ $('#searchPart').on('click',function (params) {
     $('#search').removeClass('d-none')
 });
 $('#SearchByName').on('keyup', function(e){
-    const searchData = document.querySelector('.searchData').innerHTML=""
-    const searchDataByLetter = document.querySelector('#SearchByLetter').value=""
+    document.querySelector('.searchData').innerHTML=""
+    document.querySelector('#SearchByLetter').value=""
     let name= this.value;
     if(name !== ""){
     getNameSearchData(name)
     }
 });
 async function getNameSearchData(name) {
-    const respons = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${name}`)
-    const data = await respons.json();
-    for (let i = 0; i < data.meals.length; i++) {
-        displaydataSearch(data.meals[i].strMealThumb, data.meals[i].strMeal)
-        console.log('data');
+    try {
+        
+        const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${name}`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch data');
+        }
+        const data = await response.json();
+        for (let i = 0; i < data.meals.length; i++) {
+                displaydataSearch(data.meals[i].strMealThumb, data.meals[i].strMeal)
+                console.log('data');
+            }
+    } catch (error) {
+        console.error('Error fetching data:', error.message);
+        reloadchild.classList.add('d-none');
+    reloadchild.classList.remove('d-flex');
+    window.alert('check again your inputes');
+        throw error;
+        
     }
 }
 $('#SearchByLetter').on('keyup', function(e){
-    const searchData = document.querySelector('.searchData').innerHTML=""
+    document.querySelector('.searchData').innerHTML=""
+    document.querySelector('#SearchByName').value=""
     let letter= this.value
     if(letter.length == 1){
         getNameSearchDataLetter(letter)
     }
 });
 async function getNameSearchDataLetter(letter) {
-    if(letter!= ""){
-        const respons = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?f=${letter}`)
-        const data = await respons.json();
-        console.log(data);
-        for (let i = 0; i < data.meals.length; i++) {
-            displaydataSearch(data.meals[i].strMealThumb, data.meals[i].strMeal)
+    if(letter!= "" && letter.length == 1){
+  
+    try {
+        const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?f=${letter}`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch data');
         }
+        const data = await response.json();
+        for (let i = 0; i < data.meals.length; i++) {
+                    displaydataSearch(data.meals[i].strMealThumb, data.meals[i].strMeal)
+                }
+    } catch (error) {
+        console.error('Error fetching data:', error.message);
+        reloadchild.classList.add('d-none');
+    reloadchild.classList.remove('d-flex');
+    window.alert('check again your inputes');
+        throw error;
+    }
     }
 }
 function displaydataSearch(src , p) {
@@ -185,6 +216,8 @@ function displaydataSearch(src , p) {
                 </div>
             </div>
         `);
+        reloadchild.classList.add('d-none');
+    reloadchild.classList.remove('d-flex');
 }
 //=> categories
 $('#category').on('click',function (e) {
@@ -270,7 +303,6 @@ async function getAreaMeals(country){
     firstReload.classList.remove('d-none');
     const response = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?a=${country.lastElementChild.innerHTML}`)
     const data =await response.json();
-    console.log(data);
     areaApendedData(data)
 }
 function areaApendedData(data){
@@ -298,7 +330,6 @@ displayIngredientsPart()
 async function displayIngredientsPart(){
     const response = await fetch(`https://www.themealdb.com/api/json/v1/1/list.php?i=list`)
     const data =await response.json();
-    // console.log(data);
     apendIngredients(data)
 }
 function apendIngredients(data){
@@ -324,7 +355,6 @@ async function displayIngredientDetails(data) {
     const row =document.querySelector('.firstData').innerHTML=""
     for (let i = 0; i < result.meals.length; i++) {
         displaydata(result.meals[i].strMealThumb, result.meals[i].strMeal)
-        // console.log(data.meals[i].strMealThumb, data.meals[i].strMeal);
         }
         $('#IngredientsPart').addClass('d-none');
         $('#firstFrame').removeClass('d-none')
