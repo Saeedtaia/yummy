@@ -52,12 +52,14 @@ async function getFirstData(){
     $('#firstFrame').removeClass('d-none')
     const firstData=[  52977,  53065, 53060, 53069, 53026, 52978,    52948, 52844, 52845, 52971, 53013,    52804, 53027, 52785, 52929, 52769,    52802, 52906, 53028, 52887, 52980,    53006, 52963, 52931, 52811];
     firstFrame.classList.add('overflow-hidden');
+    $(window).addClass('overflow-hidden');
     firstReload.classList.add('d-flex');
     firstReload.classList.remove('d-none');
     for (let i = 0; i < firstData.length; i++) {
         const respons = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${firstData[i]}`);
         const result = await respons.json();
         displaydata(result.meals[0].strMealThumb, result.meals[0].strMeal)
+    $(window).removeClass('overflow-hidden');
         firstReload.classList.remove('d-flex');
         firstReload.classList.add('d-none');
         firstFrame.classList.remove('overflow-hidden');
@@ -81,6 +83,7 @@ function displaydata(src , p) {
     reloadchild.classList.remove('d-flex');
 }
 async function test(div){
+    // $(window).addClass('overflow-hidden');
     firstReload.classList.add('d-flex');
     firstReload.classList.remove('d-none');
     closeNavBar()
@@ -260,19 +263,46 @@ function categoryData(strCategory,strCategoryDescription,strCategoryThumb) {
     `)
 }
 async function mainIngredients(main){
-    firstReload.classList.add('d-flex');
+    // firstReload.classList.add('d-flex');
+    // firstReload.classList.remove('d-none');
+    // const respons = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${main.lastElementChild.firstElementChild.firstElementChild.innerHTML}`)
+    // const data = await respons.json()
+    // // console.log(data);
+    // const row =document.querySelector('.firstData').innerHTML=""
+    // for (let i = 0; i < data.meals.length; i++) {
+    // displaydata(data.meals[i].strMealThumb, data.meals[i].strMeal)
+    // }
+    // $('#categoryPart').addClass('d-none')
+    // $('#firstFrame').removeClass('d-none');
+    // firstReload.classList.add('d-none');
+    // firstReload.classList.remove('d-flex');
+    try{
+        firstReload.classList.add('d-flex');
     firstReload.classList.remove('d-none');
     const respons = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${main.lastElementChild.firstElementChild.firstElementChild.innerHTML}`)
+    if(!respons.ok){
+        throw new Error('Failed to fetch data');
+    }
     const data = await respons.json()
-    // console.log(data);
-    const row =document.querySelector('.firstData').innerHTML=""
+    if(data.meals.length !== 0){
+        const row =document.querySelector('.firstData').innerHTML=""
     for (let i = 0; i < data.meals.length; i++) {
     displaydata(data.meals[i].strMealThumb, data.meals[i].strMeal)
+    }
     }
     $('#categoryPart').addClass('d-none')
     $('#firstFrame').removeClass('d-none');
     firstReload.classList.add('d-none');
     firstReload.classList.remove('d-flex');
+    }catch{
+        alert('An error occurred while getting this category. Please try again')
+        $('#categoryPart').addClass('d-none')
+    $('#firstFrame').removeClass('d-none');
+    firstReload.classList.add('d-none');
+    firstReload.classList.remove('d-flex');
+    console.error('Error fetching data:', error.message);
+    throw error;
+    }
 }
 
 //=> Area 
