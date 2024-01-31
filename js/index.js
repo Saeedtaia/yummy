@@ -115,6 +115,8 @@ async function test(div) {
 function displayDetails(result) {
   firstReload.classList.add("d-flex");
   firstReload.classList.remove("d-none");
+  $(window).scrollTop(0);
+  //   $("main").addClass("overflow-hidden");
   const deatelsShow = (document.querySelector("#detailsShow .row").innerHTML =
     "");
   $("#detailsShow .row").append(`
@@ -133,7 +135,7 @@ function displayDetails(result) {
               </div>
               <p class=""><span class="text-white fw-bold fs-4">Tags :</span></p>
               <div class="d-flex justify-content-start">
-                <a target="_blank" href="${result.meals[0].strSource}" class="btn btn-success me-1">Source</a>
+                <a target="_blank" href="${result.meals[0].strSource}" class="btn btn-success me-3">Source</a>
                 <a target="_blank" href="${result.meals[0].strYoutube}" class="btn btn-danger">Youtube</a>
               </div>
             </div>
@@ -155,7 +157,6 @@ function displayDetails(result) {
   $("#IngredientsPart").addClass("d-none");
   $("#contactUsPart").addClass("d-none");
   $("#detailsShow").removeClass("d-none");
-  $(window).scrollTop(0);
   firstReload.classList.add("d-none");
   firstReload.classList.remove("d-flex");
 }
